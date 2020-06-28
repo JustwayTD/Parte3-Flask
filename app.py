@@ -20,37 +20,37 @@ def saludar():
     return "Kombawa"
 
 
-@app.route('/slangs/<word>/<meaning>')
-def slangs(word , meaning):
-    print("Esto es prueba de que {} significa : {}!".format(word,meaning))
-    if word =="Mopri" and meaning =="primo":
-        return url_for('index')
-    else :
-        return "kombawa"
-@app.route("/new_word/<word>/<meaning>")
-def new_word(word , meaning):
-    db.db.collection.insert_one({"word":word,"meaning" :meaning})
-    return "Se pudo añadir {} correctamente con su significado{}".format(word,meaning)
+@app.route("/new_word", methods = ['POST'])
+def new_word():
+    if request.method == 'POST':
+        word = request.form['word']
+        meaning = request.form['meaning']
+        db.slangs.insert_one({"word":word,"meaning" :meaning})
+        return render_template("Agregar.html",word = word, meaning = meaning)
 
-@app.route("/edit/<word>/<new_meaning>")
-def edit(word , new_meaning):
-    word.strip()
-    new_meaning.strip()
-    collection.update_one({"Word":word} , {"$set":new_meaning})
-    return "La palabra {} se ha actualizado! el nuevo significado es{}".format(word , new_meaning)
 
-@app.route("/delete/<word>")
-def delete(word):
-    word.strip()
-    collection.delete_one({"Word":word})        
+@app.route("/editar", methods = ['POST'])
+def editar():
+    if request.method =='POST':
+        word = request.form['word']
+        new_meaning = request.form['new_mean']
+        db.slangs.find_one_and_update(
+            {"Word" :word} ,
+            {"$set":{"meaning": new_meaning}})
+        return render_template("editar.html", word = word)
+@app.route("/eliminar" , methods =['POST'])
+def eliminar():
+    if request.method == 'POST':
+        word = request.form['word']
+        db.slangs.delete_one({"Word" :word})
+        return render_template("eliminar.html", word = word)
+      
 
 #so far the show option was only available while only using python..... translation to flask is still needed
-@app.route("/show")
-def show():
-    words = collection.find()
-    return 
-
-
-
+@app.route("/lista")
+def lista():
+    if request.method == 'GET':
+        lista = db.slangs.find({},{"_id" :0,"word":1,"meaning":1})
+        return render_template("Lista.html", result = lista)
 if __name__ == "__main__":
-    app.run(debug= True, port= 8000)
+    app.run(debug= True)

@@ -1,0 +1,17 @@
+<html>
+    <title>Lista!</title>
+    <body>
+        <H5>Slangs</H5>
+        <table border="1">
+            <th>Palabra</th>
+            <th>Significado</th>
+
+            {% for x in result %}
+            <tr>
+                <td>{{x["word"]}}</td>
+                <td>{{x["meaning"]}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

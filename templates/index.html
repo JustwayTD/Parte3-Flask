@@ -2,15 +2,27 @@
     <title>Index</title>
 
     <body>
-        <script>
-            function boton_Buscar(valor) {
-                var x = valor 
-                document.getElementById("botonbuscar1").Value = x 
-                alert(x)
-                }</script>
-        <H4>Bienvenido Fren! Esta es la pagina que te mostrara mi base de datos de slangs panamenos</H4>
-        <input class="width150" type="text" id="botonbuscar1" value=""></input>
-        <button type="button" onclick="boton_Buscar(botonbuscar1)" class = "botoBuscar">Buscar!</button>
+         <H4>Bienvenido Fren! Esta es la pagina que te mostrara mi base de datos de slangs panamenos</H4>
+         <form action="{{url_for('new_word')}}" method="POST">
+            <p>Palabra nueva <input type="text" name="word"></p>
+            <p>Su Significado <input type="text" name="meaning"></p>    
+            <input type="submit" value="Agrega una nueva palabra, fren!">
+         </form>
+         <form action="{{url_for('eliminar')}}" method="POST">
+             <p>Palabra a eliminar:(Case Sensitive) <input type="text" name = "word"></p>
+             <input type="submit" value="Eliminar una palabra!">
+         </form>
+         <form action="{{url_for('editar')}}" method="POST">
+             <p>Palabra a editar: <input type="text" name ="word"></p>
+             <p>Nuevo Significado: <input type="text" name = "new_mean"></p>
+            <input type="submit" value="Edita una palabra!">
+         </form>
+         <form action="{{url_for('lista')}}" method="GET">
+            <input type="submit" value="Quieres ver la lista?">
+         </form>
+         <form action="meaning.html">
+            <input type="submit" value="Algun significado?">
+         </form>
     </body>
 
 </html>
